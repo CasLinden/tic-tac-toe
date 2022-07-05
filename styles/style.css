@@ -1,0 +1,15 @@
+#board-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap:5px;
+    width: 500px;
+    height: 500px;
+    font-size: 120px;
+}
+
+#board-container > div {
+    display: grid;
+    place-content: center;
+    background: aquamarine;
+}
