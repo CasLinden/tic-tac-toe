@@ -7,6 +7,10 @@ const board = (function(){
         return container.children;
     };
 
+    const fields = (string) => {
+        return document.getElementsByClassName(string);
+    };
+
     const field = (number) => {
         return document.querySelector(`[data-index='${number}']`);
     };
@@ -36,11 +40,26 @@ const board = (function(){
         };
     };
 
-return {state, render, setClick, field, clear};
+
+    const lightUp = (row) => {
+        // lightup is called elsewhere and it runs but it looks like elements aren't properly selected
+        let selection = fields(row);
+        console.log(selection);
+        // for (let i = 0; i < 3; i++){
+        // selection[i].style.backgroundColor = 'red';
+        // }
+    }
+
+    // const signalWin = (row) => {
+    //     if (row === row1){
+    //         field(0) 
+    //     }
+    // };
+
+return {state, render, setClick, field, clear, lightUp};
 })();
 
 board.setClick();
-
 
 /* --------------------------------------------------------------------------------*/
 
@@ -52,8 +71,12 @@ const Player = (name, symbol) => {
             board.state[number] = symbol;
             console.log(board.state)
             };
+
+    const win = () => {
+        console.log(`${name} has won the game`)
+    }
     
-return {name, symbol, play};
+return {name, symbol, play, win};
 };
 
 const player1 = Player('cas', 'X');
@@ -77,7 +100,6 @@ const game = (function(){
         changePlayer();
     };
 
-
     let state = {
         row1: [null, null, null],
         row2: [null, null, null],
@@ -90,7 +112,6 @@ const game = (function(){
         diagonal1: [null, null, null],
         diagonal2: [null, null, null]
     };
-
 
     const updateState = (number) => {
         if(number == 0){
@@ -127,6 +148,7 @@ const game = (function(){
             state.column3[2] =  currentPlayer.symbol;
             state.diagonal1[2] = currentPlayer.symbol;
         };
+        checkWin()
     };
 
     const checkRow = (row) => {
@@ -139,11 +161,15 @@ const game = (function(){
     };
 
     const checkWin = () => {
-       // find a way to loop over all entries in state
-       // perform checkRow for each
-       // return the row that returns true 
-       // perform some visual crap on that row
-       // count a win for the current player
+        for (const key of Object.keys(state)){
+            if (checkRow(state[key])){
+                currentPlayer.win();
+                board.lightUp(key);
+                board.clear();
+                clearState();
+                return key;
+            }
+        }
     };
 
     const clearState = () => {
@@ -159,3 +185,4 @@ const game = (function(){
 
 return {currentPlayer, turn, updateState, state, clearState, checkRow, checkWin}
 })();
+
