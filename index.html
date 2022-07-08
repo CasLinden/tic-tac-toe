@@ -7,19 +7,42 @@
     <title>Cas' tic-tac-toe</title>
     <link href="styles/style.css" rel="stylesheet" type="text/css">
     <script src="scripts/main.js" defer></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 </head>
 <body>
 
- <div id="board-container">
-    <div data-index="0" class="column1" class="row1" class="diagonal1"></div>
-    <div data-index="1" class="column2" class="row1" class="diagonal2"></div>
-    <div data-index="2" class="column3" class="row1" ></div>
-    <div data-index="3" class="column1" class="row2" class="diagonal2" class="diagonal1"></div>
-    <div data-index="4" class="column2" class="row2"></div>
-    <div data-index="5" class="column3" class="row2"></div>
-    <div data-index="6" class="column1" class="row3" class="diagonal2"></div>
-    <div data-index="7" class="column2" class="row3"></div>
-    <div data-index="8" class="column3" class="row3" class="diagonal1"></div>
+ <div id="wrapper">
+     <div id="board-container">
+        <div data-index="0" class="column1 row1 diagonal1"></div>
+        <div data-index="1" class="column2 row1"></div>
+        <div data-index="2" class="column3 row1 diagonal2" ></div>
+        <div data-index="3" class="column1 row2"></div>
+        <div data-index="4" class="column2 row2 diagonal2 diagonal1"></div>
+        <div data-index="5" class="column3 row2"></div>
+        <div data-index="6" class="column1 row3 diagonal2"></div>
+        <div data-index="7" class="column2 row3"></div>
+        <div data-index="8" class="column3 row3 diagonal1"></div>
+     </div>
+     <div id="interface">
+       <div class="player" id="player1">
+        <div class="score">score</div>
+        <div class="playername">Player1</div>
+        <div class="symbols">
+            <div class="symbol" id="symbol1"></div>
+            <div class="symbol" id="symbol2"></div>
+            <div class="symbol" id="symbol3"></div>
+        </div>
+       </div>
+       <div class="player" id="player2">
+        <div class="score">score</div>
+        <div class="playername">Player2</div>
+        <div class="symbols">
+            <div class="symbol" id="symbol1"></div>
+            <div class="symbol" id="symbol2"></div>
+            <div class="symbol" id="symbol3"></div>
+        </div>
+       </div>
+     </div>
  </div>
 
 </body>

@@ -1,10 +1,27 @@
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+html {
+    box-sizing: border-box;
+    font-family: 'Roboto';
+}
+
+#wrapper{
+    width: 90vw;
+    padding: 5rem;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
 #board-container{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     gap:5px;
-    width: 500px;
-    height: 500px;
+    width: 450px;
+    height: 450px;
     font-size: 120px;
 }
 
@@ -12,4 +29,42 @@
     display: grid;
     place-content: center;
     background: aquamarine;
+    transition: all 0.3s;
+}
+
+#interface{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    padding: 1.5rem 4rem 1.5rem 4rem;
+    font-size: 22px;
+}
+
+.player{
+display: flex;
+flex-direction: column;
+gap: 1rem;
+}
+
+.symbols{
+    width:  150px;
+    height: 50px;
+    border: 1px solid black;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.symbol{
+    border: 1px solid grey;
+}
+
+.litup{
+    font-weight: 900;
+    border-color: black;
+    box-shadow: 0 0 20px black;
+}
+
+.currentplayer{
+    background-color: grey;
 }

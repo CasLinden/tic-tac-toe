@@ -40,26 +40,44 @@ const board = (function(){
         };
     };
 
-
-    const lightUp = (row) => {
-        // lightup is called elsewhere and it runs but it looks like elements aren't properly selected
-        let selection = fields(row);
-        console.log(selection);
-        // for (let i = 0; i < 3; i++){
-        // selection[i].style.backgroundColor = 'red';
-        // }
+    const signalTurn = (player) => {
+        const one = document.querySelector('#player1');
+        const two = document.querySelector('#player2');
+        if (player == player1){
+            one.style.border = '1px solid red';
+            two.style.border = 'none'
+        } if (player == player2){
+            two.style.border = '1px solid red';
+            one.style.border = 'none'
+        }
     }
 
-    // const signalWin = (row) => {
-    //     if (row === row1){
-    //         field(0) 
-    //     }
-    // };
+    const lightUp = (row) => {
+        const squares = fields(row);
+        for (let square of squares){
+            square.classList.add('litup')
+        }
+    };
 
-return {state, render, setClick, field, clear, lightUp};
+    const lightsOff = () => {
+        let fields = allFields();
+        for (let field of fields){
+            field.addEventListener('transitionend', removeTransition)
+            function removeTransition(){
+            field.classList.remove('litup');
+            clear();
+            }
+        }
+    }
+
+
+return {state, render, setClick, field, clear, lightUp, fields, lightsOff, signalTurn};
 })();
 
 board.setClick();
+board.lightsOff()
+
+
 
 /* --------------------------------------------------------------------------------*/
 
@@ -79,8 +97,9 @@ const Player = (name, symbol) => {
 return {name, symbol, play, win};
 };
 
-const player1 = Player('cas', 'X');
-const player2 = Player('vincent', 'O');
+const player1 = Player('player1', 'X');
+const player2 = Player('player2', 'O');
+board.signalTurn(player1)
 
 /* --------------------------------------------------------------------------------*/
 
@@ -89,7 +108,6 @@ const game = (function(){
 
     const changePlayer = () => {
     currentPlayer == player1? currentPlayer = player2 : currentPlayer = player1;
-    console.log(`It's now ${currentPlayer.name}'s turn`);
     };
     
     const turn = (number) => {
@@ -97,7 +115,9 @@ const game = (function(){
         currentPlayer.play(number);
         console.log(`${currentPlayer.name} played`);
         game.updateState(number);
+        checkWin()
         changePlayer();
+        board.signalTurn(currentPlayer)
     };
 
     let state = {
@@ -148,7 +168,6 @@ const game = (function(){
             state.column3[2] =  currentPlayer.symbol;
             state.diagonal1[2] = currentPlayer.symbol;
         };
-        checkWin()
     };
 
     const checkRow = (row) => {
@@ -165,7 +184,6 @@ const game = (function(){
             if (checkRow(state[key])){
                 currentPlayer.win();
                 board.lightUp(key);
-                board.clear();
                 clearState();
                 return key;
             }
@@ -183,6 +201,5 @@ const game = (function(){
         state.diagonal2 = [null, null, null];
     };
 
-return {currentPlayer, turn, updateState, state, clearState, checkRow, checkWin}
+return {currentPlayer, changePlayer, turn, updateState, state, clearState, checkRow, checkWin}
 })();
-
