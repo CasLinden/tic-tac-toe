@@ -27,6 +27,7 @@ const board = (function(){
             state[i] = null;
         };
         render();
+        game.clearState()
     };
 
     const setClick = () => {
@@ -127,8 +128,8 @@ const game = (function(){
     const turn = (number) => {
         if (board.state[number] !== null) return
         currentPlayer.play(number);
-        console.log(`${currentPlayer.name} played`);
         game.updateState(number);
+        if(game.checkDraw()){board.clear()};
         checkWin()
         changePlayer();
         board.signalTurn(currentPlayer)
@@ -184,7 +185,7 @@ const game = (function(){
         };
     };
 
-    const checkRow = (row) => {
+    const rowWin = (row) => {
         const result = row.every(e => {
             if (row[0] != null && e === row[0]){
                 return true;
@@ -193,9 +194,29 @@ const game = (function(){
      return result;
     };
 
+    const rowDraw = (row) => {
+        const result = row.every(e => {
+            if (row.includes('X') && row.includes('O') ){
+                return true;
+            }
+        });
+     return result;
+    };
+
+    const checkDraw = () => {
+        let results = [];
+        for (const key of Object.keys(state)){
+            let result = rowDraw(state[key]);
+            results.push(result);
+        };
+        if(!results.includes(false)){
+            return true;
+        };
+    };
+
     const checkWin = () => {
         for (const key of Object.keys(state)){
-            if (checkRow(state[key])){
+            if (rowWin(state[key])){
                 currentPlayer.win();
                 board.lightUp(key);
                 clearState();
@@ -215,5 +236,5 @@ const game = (function(){
         state.diagonal2 = [null, null, null];
     };
 
-return {currentPlayer, changePlayer, turn, updateState, state, clearState, checkRow, checkWin}
+return {currentPlayer, changePlayer, turn, updateState, state, clearState, rowWin, checkWin, rowDraw, checkDraw}
 })();
