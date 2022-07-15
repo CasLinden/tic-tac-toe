@@ -2,19 +2,25 @@
     box-sizing: inherit;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap');
+
 html {
     box-sizing: border-box;
-    font-family: 'Roboto';
+    font-family: 'Gochi Hand';
+    
 }
 
 #wrapper{
     width: 1200px;
     height: 800px;
-    padding: 5rem;
-    padding-bottom: 10rem;
+    padding: 7rem;
+    padding-bottom: 9rem;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    place-items: center;
+    grid-template-columns: 450px 1fr;
+    grid-template-rows: 450px 1fr;
+    grid-template-areas: 
+    "board interface"
+    "below-board below-interface";
     background-image: url("../whiteboard.svg");
     background-repeat: no-repeat;
 }
@@ -47,6 +53,15 @@ html {
     justify-content: space-around;
     padding: 1.5rem 4rem 1.5rem 4rem;
     font-size: 22px;
+    width:300px;
+}
+
+#below-board,
+#eraser{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
 }
 
 .player{

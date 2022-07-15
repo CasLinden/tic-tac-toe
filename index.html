@@ -7,32 +7,54 @@
     <title>Cas' tic-tac-toe</title>
     <link href="styles/style.css" rel="stylesheet" type="text/css">
     <script src="scripts/main.js" defer></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap" rel="stylesheet">
 </head>
 <body>
 
  <div id="wrapper">
-     <div id="board-container">
-        <div data-index="0" class="column1 row1 diagonal1"></div>
-        <div data-index="1" class="column2 row1"></div>
-        <div data-index="2" class="column3 row1 diagonal2" ></div>
-        <div data-index="3" class="column1 row2"></div>
-        <div data-index="4" class="column2 row2 diagonal2 diagonal1"></div>
-        <div data-index="5" class="column3 row2"></div>
-        <div data-index="6" class="column1 row3 diagonal2"></div>
-        <div data-index="7" class="column2 row3"></div>
-        <div data-index="8" class="column3 row3 diagonal1"></div>
-     </div>
-     <div id="interface">
-       <div class="player" id="player1">
-        <div class="score">score</div>
-        <div class="playername">Player1</div>
-       </div>
-       <div class="player" id="player2">
-        <div class="score">score</div>
-        <div class="playername">Player2</div>
-       </div>
-     </div>
+
+      <div id="board-container">
+          <div data-index="0" class="column1 row1 diagonal1"></div>
+          <div data-index="1" class="column2 row1"></div>
+          <div data-index="2" class="column3 row1 diagonal2" ></div>
+          <div data-index="3" class="column1 row2"></div>
+          <div data-index="4" class="column2 row2 diagonal2 diagonal1"></div>
+          <div data-index="5" class="column3 row2"></div>
+          <div data-index="6" class="column1 row3 diagonal2"></div>
+          <div data-index="7" class="column2 row3"></div>
+          <div data-index="8" class="column3 row3 diagonal1"></div>
+      </div>
+
+      <div id="interface">
+         <div class="player" id="player1">
+          <div class="score"></div>
+          <div class="playername">Player 1</div>
+         </div>
+         <div class="player" id="player2">
+          <div class="score"></div>
+          <div class="playername">Player 2</div>
+         </div>
+      </div>
+
+      <div id="below-board">
+      
+      
+        <div id="eraser">
+          <svg width="75px" height="75px" version="1.1" viewBox="0 0 752 752" xmlns="http://www.w3.org/2000/svg">
+           <g fill-rule="evenodd">
+           <path d="m362.93 226.88 20.93-20.93c2.8867-2.8867 2.8867-7.5781 0-10.465s-7.5781-2.8867-10.465 0l-20.93 20.93c-2.8867 2.8867-2.8867 7.5781 0 10.465 2.8867 2.8867 7.5781 2.8867 10.465 0z"/>
+           <path d="m420.48 525.12-20.93 20.93c-2.8867 2.8867-2.8867 7.5781 0 10.465s7.5781 2.8867 10.465 0l20.93-20.93c2.8867-2.8867 2.8867-7.5781 0-10.465-2.8867-2.8867-7.5781-2.8867-10.465 0z"/>
+           <path d="m404.78 185.02c-2.8906 2.8906-7.5742 2.8906-10.465 0s-2.8906-7.5742 0-10.465c2.8906-2.8906 7.5742-2.8906 10.465 0 2.8906 2.8906 2.8906 7.5742 0 10.465z"/>
+           <path d="m389.08 577.45c2.8906-2.8906 2.8906-7.5742 0-10.465s-7.5742-2.8906-10.465 0c-2.8906 2.8906-2.8906 7.5742 0 10.465 2.8906 2.8906 7.5742 2.8906 10.465 0z"/>
+           <path d="m268.73 530.36c-8.6641 8.6641-22.723 8.6641-31.391 0-13.047-13.055-35.668-35.668-52.324-52.324-14.453-14.453-14.453-37.879 0-52.324l240.69-240.69c14.445-14.453 37.871-14.453 52.324 0l52.324 52.324c8.6641 8.6719 8.6641 22.723 0 31.398 12.207 12.211 24.414 24.418 36.621 36.629 6.9414 6.9336 10.84 16.348 10.84 26.156 0 9.8125-3.8984 19.223-10.84 26.164l-209.29 209.29c-6.9414 6.9414-16.348 10.832-26.156 10.832-9.8125 0-19.223-3.8906-26.164-10.832zm198.83-334.88c-8.6641-8.6641-22.723-8.6641-31.391 0l-240.69 240.69c-8.6641 8.6719-8.6641 22.723 0 31.398 16.664 16.656 39.277 39.27 52.324 52.324 2.8945 2.8867 7.5781 2.8867 10.465 0l261.62-261.62c2.8945-2.8945 2.8945-7.5781 0-10.469z"/>
+           </g>
+          </svg>
+          <span>Erase</span>
+        </div>
+      
+
+      </div>
+    
  </div>
 
 </body>
