@@ -7,6 +7,7 @@
 html {
     box-sizing: border-box;
     font-family: 'Gochi Hand';
+    color: grey;
     
 }
 
@@ -34,14 +35,15 @@ html {
     width: 450px;
     height: 450px;
     font-size: 120px;
-    background-color: rgb(14, 12, 12);
+    background-image: url("../board.jpg");
+    /* background-color: rgb(14, 12, 12); */
 }
 
 #board-container > div {
     display: grid;
     place-content: center;
     transition: all 1s;
-    background-color: white;
+    /* background-color: white; */
     margin: 0;
     padding: 0;
 }
