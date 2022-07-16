@@ -57,6 +57,21 @@ html {
     width:300px;
 }
 
+#AI-btn{
+    height: 2rem;
+    width: 50px;
+    border: solid;
+    color: black;
+}
+
+.active{
+    background-color: green;
+}
+
+.inactive{
+    background-color: red;
+}
+
 #below-board,
 #eraser{
     font-size: 25px;

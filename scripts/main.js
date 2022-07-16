@@ -44,6 +44,21 @@ const board = (function(){
         };
     };
 
+    const setAIClick = () => {
+        const btn = document.getElementById('AI-btn');
+        btn.addEventListener('click', toggleAI, false);
+                
+            function toggleAI() {
+                if (btn.className === 'active'){
+                    btn.className = 'inactive';
+                    AI.off()
+                  } else {
+                    btn.className = 'active';
+                    AI.on()
+                  }
+            };
+    }
+
     const lightUp = (row) => {
         const squares = fields(row);
         for (let square of squares){
@@ -63,7 +78,8 @@ const board = (function(){
     }
 
     setClick();
-    lightsOff()
+    setAIClick();
+    lightsOff();
 
 
 return {state, render, setClick, field, allFields, clear, lightUp, fields, lightsOff};
