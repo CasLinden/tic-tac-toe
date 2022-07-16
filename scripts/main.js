@@ -66,7 +66,7 @@ const board = (function(){
     lightsOff()
 
 
-return {state, render, setClick, field, clear, lightUp, fields, lightsOff};
+return {state, render, setClick, field, allFields, clear, lightUp, fields, lightsOff};
 })();
 
 
@@ -82,8 +82,8 @@ const interface = (function(){
     }
 
     const signalTurn = (player) => {
-        const one = document.querySelector('#player1');
-        const two = document.querySelector('#player2');
+        const one = p1()
+        const two = p2()
         if (player == player1){
             one.style.color = 'black';
             two.style.color = 'grey'
@@ -91,6 +91,14 @@ const interface = (function(){
             two.style.color = 'black';
             one.style.color = 'grey'
         }
+    }
+
+    const p1 = () => {
+       return document.getElementById('player1');
+    }
+
+    const p2 = () => {
+       return  document.getElementById('player2');
     }
     
 return {eraser, signalTurn}
@@ -122,7 +130,7 @@ const Player = (name, symbol) => {
             };
 
     const win = () => {
-        console.log(`${name} has won the game`)
+        console.log(`${currentPlayer.name} has won the game`)
     }
     
 return {name, symbol, play, win};
@@ -131,13 +139,14 @@ return {name, symbol, play, win};
 /* --------------------------------------------------------------------------------*/
 
 let player1 = Player('player1', 'X');
+let player2 = Player('player2', 'O');
 let currentPlayer = player1
 
 
 
 /* --------------------------------------------------------------------------------*/
-const AI = (name, symbol) => {
-    const prototype = Player(name, symbol);
+const AI = (function(){
+    const prototype = Player();
 
     const legalMoves = () => {
         const moves = [];
@@ -150,20 +159,44 @@ const AI = (name, symbol) => {
     };
     
     const randomMove = () => {
-        if(game.currentPlayer == player2){
+        if(currentPlayer.name == 'bot'){
            let moves = legalMoves();
            let choice = Math.floor(Math.random() * legalMoves().length);
            game.turn(moves[choice]);
            };
+        return
     };
-    
 
-    const lmao = 'rofl'
-    
-    return Object.assign({}, prototype, {randomMove, lmao});
-};
+    const on = () => {
+        player2.name = 'bot'
 
-let player2 = AI('bot', 'O');
+            let fields = board.allFields();
+            for(let field of fields){
+                field.addEventListener('click', botPlay, false);
+                    
+                    function botPlay() {
+                    randomMove()
+                    };
+            }; 
+    }
+
+    const off = () => {
+        player2.name = 'player2'
+
+            let fields = board.allFields();
+            for(let field of fields){
+                field.removeEventListener('click', botPlay, false);
+
+                    function botPlay() {
+                    randomMove()
+                    };  
+            }; 
+    }
+
+    
+      return {randomMove, on, off}
+})();
+
 
 
 /* --------------------------------------------------------------------------------*/

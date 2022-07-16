@@ -2,12 +2,11 @@
     box-sizing: inherit;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap');
-
 html {
     box-sizing: border-box;
     font-family: 'Gochi Hand';
     color: grey;
+    font-size: 14px;
     
 }
 
@@ -60,6 +59,7 @@ html {
 
 #below-board,
 #eraser{
+    font-size: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
