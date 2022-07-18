@@ -44,21 +44,6 @@ const board = (function(){
         };
     };
 
-    const setAIClick = () => {
-        const btn = document.getElementById('AI-btn');
-        btn.addEventListener('click', toggleAI, false);
-                
-            function toggleAI() {
-                if (btn.className === 'active'){
-                    btn.className = 'inactive';
-                    AI.off()
-                  } else {
-                    btn.className = 'active';
-                    AI.on()
-                  }
-            };
-    }
-
     const lightUp = (row) => {
         const squares = fields(row);
         for (let square of squares){
@@ -78,7 +63,6 @@ const board = (function(){
     }
 
     setClick();
-    setAIClick();
     lightsOff();
 
 
@@ -116,6 +100,23 @@ const interface = (function(){
     const p2 = () => {
        return  document.getElementById('player2');
     }
+
+    const setAIClick = () => {
+        const btn = document.getElementById('AI-btn');
+        btn.addEventListener('click', toggleAI, false);
+                
+            function toggleAI() {
+                if (btn.className === 'active'){
+                    btn.className = 'inactive';
+                    AI.off()
+                  } else {
+                    btn.className = 'active';
+                    AI.on()
+                  }
+            };
+    }
+
+    setAIClick()
     
 return {eraser, signalTurn}
 })();
@@ -162,7 +163,6 @@ let currentPlayer = player1
 
 /* --------------------------------------------------------------------------------*/
 const AI = (function(){
-    const prototype = Player();
 
     const legalMoves = () => {
         const moves = [];
@@ -180,8 +180,65 @@ const AI = (function(){
            let choice = Math.floor(Math.random() * legalMoves().length);
            game.turn(moves[choice]);
            };
-        return
+        return;
     };
+
+    const countValue = (row, value) => {
+        let counter = 0;
+        row.forEach(e => {
+            if (e === value) {counter++};
+        });
+        return counter;
+    };
+
+    const win = () => {
+        const state = game.state;
+        for (const key of Object.keys(state)){ 
+            if(countValue(state[key], 'O') === 2 && countValue(state[key], null) !== 0);
+            return key;
+        };
+    };
+
+    const blockWin = () => {
+        const state = game.state;
+        for (const key of Object.keys(state)){ 
+            if(countValue(state[key], 'X') === 2 && countValue(state[key], null) !== 0);
+            return key ;
+        };
+    };
+
+    const cornerPrio = () => {
+        let corners = board.fields('corner');
+        for (let corner of corners){
+            let value = corner.getAttribute('data-index');
+            console.log(value);
+        }
+    }
+
+    const makeMove = (move) => {
+        let row
+        if(move()){
+           row = board.fields(move())
+        } else {return}
+        for (let square of row){
+            game.turn(square.getAttribute('data-index'));
+        }
+    }
+
+    const secureCenter = () => {
+        if (board.state[4] === null && currentPlayer.name == 'bot' ){
+            game.turn(4);
+        }
+    }
+
+
+    
+
+    const selectFields = () => {
+        squares = board.fields('column1')
+        console.log(squares)
+    }
+   
 
     const on = () => {
         player2.name = 'bot'
@@ -210,7 +267,7 @@ const AI = (function(){
     }
 
     
-      return {randomMove, on, off}
+      return {randomMove, on, off, countValue, win, blockWin, makeMove, selectFields, cornerPrio}
 })();
 
 
