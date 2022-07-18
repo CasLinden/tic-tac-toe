@@ -66,7 +66,7 @@ const board = (function(){
     lightsOff();
 
 
-return {state, render, setClick, field, allFields, clear, lightUp, fields, lightsOff};
+return {state, field, fields, allFields, clear, lightUp};
 })();
 
 
@@ -80,10 +80,11 @@ const interface = (function(){
                 board.clear()
                 };
     }
+    eraser()
 
     const signalTurn = (player) => {
-        const one = p1()
-        const two = p2()
+        const one = document.getElementById('player1');
+        const two = document.getElementById('player2');
         if (player == player1){
             one.style.color = 'black';
             two.style.color = 'grey'
@@ -91,14 +92,6 @@ const interface = (function(){
             two.style.color = 'black';
             one.style.color = 'grey'
         }
-    }
-
-    const p1 = () => {
-       return document.getElementById('player1');
-    }
-
-    const p2 = () => {
-       return  document.getElementById('player2');
     }
 
     const setAIClick = () => {
@@ -118,10 +111,9 @@ const interface = (function(){
 
     setAIClick()
     
-return {eraser, signalTurn}
+return {signalTurn}
 })();
 
-interface.eraser()
 /* --------------------------------------------------------------------------------*/
 
 const Player = (name, symbol) => {
@@ -147,7 +139,7 @@ const Player = (name, symbol) => {
             };
 
     const win = () => {
-        console.log(`${currentPlayer.name} has won the game`)
+        
     }
     
 return {name, symbol, play, win};
@@ -194,51 +186,58 @@ const AI = (function(){
     const win = () => {
         const state = game.state;
         for (const key of Object.keys(state)){ 
-            if(countValue(state[key], 'O') === 2 && countValue(state[key], null) !== 0);
+            if(countValue(state[key], 'O') === 2 && countValue(state[key], null) !== 0){;
             return key;
+            }
         };
     };
 
     const blockWin = () => {
         const state = game.state;
         for (const key of Object.keys(state)){ 
-            if(countValue(state[key], 'X') === 2 && countValue(state[key], null) !== 0);
+            if(countValue(state[key], 'X') === 2 && countValue(state[key], null) !== 0){;
             return key ;
+            }
         };
     };
-
-    const cornerPrio = () => {
-        let corners = board.fields('corner');
-        for (let corner of corners){
-            let value = corner.getAttribute('data-index');
-            console.log(value);
-        }
-    }
 
     const makeMove = (move) => {
         let row
         if(move()){
            row = board.fields(move())
-        } else {return}
-        for (let square of row){
+        } else{return};
+
+        {for (let square of row){
+            if(currentPlayer.name == 'bot'){
             game.turn(square.getAttribute('data-index'));
-        }
-    }
+            };
+        };
+    };
+};
+
+    const cornerPrio = () => {
+        let corners = board.fields('corner');
+        for (let corner of corners){
+                if(currentPlayer.name == 'bot'){
+                game.turn(corner.getAttribute('data-index'))
+                };
+        };
+    };
 
     const secureCenter = () => {
-        if (board.state[4] === null && currentPlayer.name == 'bot' ){
+        if (board.state[4] === null && currentPlayer.name == 'bot'){
             game.turn(4);
-        }
-    }
+        }else return;
+    };
 
+    const unbeatable = () => {
+        makeMove(win);
+        makeMove(blockWin);
+        secureCenter()
+        cornerPrio()
+        randomMove()
+    };
 
-    
-
-    const selectFields = () => {
-        squares = board.fields('column1')
-        console.log(squares)
-    }
-   
 
     const on = () => {
         player2.name = 'bot'
@@ -248,7 +247,7 @@ const AI = (function(){
                 field.addEventListener('click', botPlay, false);
                     
                     function botPlay() {
-                    randomMove()
+                    unbeatable()
                     };
             }; 
     }
@@ -261,20 +260,20 @@ const AI = (function(){
                 field.removeEventListener('click', botPlay, false);
 
                     function botPlay() {
-                    randomMove()
+                    unbeatable()
                     };  
             }; 
     }
 
     
-      return {randomMove, on, off, countValue, win, blockWin, makeMove, selectFields, cornerPrio}
+      return {on, off}
 })();
-
-
 
 /* --------------------------------------------------------------------------------*/
 
 const game = (function(){
+
+    let count = 0;
 
     const changePlayer = () => {
         currentPlayer === player1? currentPlayer = player2 : currentPlayer = player1;
@@ -283,25 +282,27 @@ const game = (function(){
     const turn = (number) => {
         if (board.state[number] !== null) return
         currentPlayer.play(number);
-        game.updateState(number);
-        if(game.checkDraw()){board.clear()};
+        updateState(number);
+        if(checkDraw()){board.clear()};
         checkWin()
         changePlayer();
         interface.signalTurn(currentPlayer)
     };
 
-    let state = {
-        row1: [null, null, null],
-        row2: [null, null, null],
-        row3: [null, null, null],
+    let state = {};
 
-        column1: [null, null, null],
-        column2: [null, null, null],
-        column3: [null, null, null],
-
-        diagonal1: [null, null, null],
-        diagonal2: [null, null, null]
+    const clearState = () => {
+        state.row1 = [null, null, null];
+        state.row2 = [null, null, null];
+        state.row3 = [null, null, null];
+        state.column1 = [null, null, null];
+        state.column2 = [null, null, null];
+        state.column3 = [null, null, null];
+        state.diagonal1 = [null, null, null];
+        state.diagonal2 = [null, null, null];
     };
+
+    clearState()
 
     const updateState = (number) => {
         if(number == 0){
@@ -380,16 +381,5 @@ const game = (function(){
         }
     };
 
-    const clearState = () => {
-        state.row1 = [null, null, null];
-        state.row2 = [null, null, null];
-        state.row3 = [null, null, null];
-        state.column1 = [null, null, null];
-        state.column2 = [null, null, null];
-        state.column3 = [null, null, null];
-        state.diagonal1 = [null, null, null];
-        state.diagonal2 = [null, null, null];
-    };
-
-return {currentPlayer, changePlayer, turn, updateState, state, clearState, rowWin, checkWin, rowDraw, checkDraw}
+return {turn, state, clearState}
 })();
