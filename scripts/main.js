@@ -1,3 +1,12 @@
+// Where to go from here:
+// - Satisfying tally win counter
+// - Better win animation
+// - shake animation for draw
+// - draw 10 times against the AI challenge 
+// - Fixing the AI when player starts with opposite corners
+// - Editable names 
+
+
 const board = (function(){
 
     let state = [ null, null, null, 
@@ -32,16 +41,41 @@ const board = (function(){
         game.clearState()
     };
 
-    const setClick = () => {
+    const armFields = () => {
         let fields = allFields();
         for(let field of fields){
             field.addEventListener('click', consumeTurn, false);
                 
                 function consumeTurn() {
-                let number = +this.getAttribute('data-index');
-                game.turn(number);
+                playPlay(this);
                 };
         };
+    };
+
+    const disarmFields = () => {
+        let fields = allFields();
+        for(let field of fields){
+            field.removeEventListener('click', consumeTurn, false);
+                
+                function consumeTurn() {
+                playPlay(this);
+                };
+        };
+    };
+
+
+    const playPlay = (square) => {
+        let number = +square.getAttribute('data-index');
+        game.turn(number);
+    };
+
+
+
+    const freeze = (time) => {
+        disarmFields();
+        setTimeout(() => {
+            armFields();
+            }, time);
     };
 
     const lightUp = (row) => {
@@ -62,11 +96,11 @@ const board = (function(){
         }
     }
 
-    setClick();
+    armFields();
     lightsOff();
 
 
-return {state, field, fields, allFields, clear, lightUp};
+return {state, field, fields, allFields, clear, lightUp, freeze, armFields, disarmFields};
 })();
 
 
@@ -94,7 +128,7 @@ const interface = (function(){
         }
     }
 
-    const setAIClick = () => {
+    const AIBtn = () => {
         const btn = document.getElementById('AI-btn');
         btn.addEventListener('click', toggleAI, false);
                 
@@ -109,7 +143,7 @@ const interface = (function(){
             };
     }
 
-    setAIClick()
+    AIBtn()
     
 return {signalTurn}
 })();
@@ -139,7 +173,7 @@ const Player = (name, symbol) => {
             };
 
     const win = () => {
-        
+
     }
     
 return {name, symbol, play, win};
@@ -151,9 +185,8 @@ let player1 = Player('player1', 'X');
 let player2 = Player('player2', 'O');
 let currentPlayer = player1
 
-
-
 /* --------------------------------------------------------------------------------*/
+
 const AI = (function(){
 
     const legalMoves = () => {
@@ -230,14 +263,21 @@ const AI = (function(){
         }else return;
     };
 
-    const unbeatable = () => {
+    const smartMove = () => {
+        if(!AI.frozen){
         makeMove(win);
         makeMove(blockWin);
-        secureCenter()
-        cornerPrio()
-        randomMove()
+        secureCenter();
+        cornerPrio();
+        randomMove();
+        };
     };
 
+    const slowMove = () => {
+        setTimeout(() => {
+            smartMove();
+        }, 400);
+    }
 
     const on = () => {
         player2.name = 'bot'
@@ -247,7 +287,7 @@ const AI = (function(){
                 field.addEventListener('click', botPlay, false);
                     
                     function botPlay() {
-                    unbeatable()
+                    slowMove()
                     };
             }; 
     }
@@ -260,13 +300,23 @@ const AI = (function(){
                 field.removeEventListener('click', botPlay, false);
 
                     function botPlay() {
-                    unbeatable()
+                    slowMove()
                     };  
             }; 
-    }
+    };
 
-    
-      return {on, off}
+    const freeze = (time) => {
+        AI.frozen = true;
+        setTimeout(() => {
+            unFreeze();
+            }, time);
+    };
+
+    const unFreeze = () => {
+        AI.frozen = false;
+    };
+      
+    return {on, off, freeze, unFreeze}
 })();
 
 /* --------------------------------------------------------------------------------*/
@@ -283,7 +333,11 @@ const game = (function(){
         if (board.state[number] !== null) return
         currentPlayer.play(number);
         updateState(number);
-        if(checkDraw()){board.clear()};
+        if(checkDraw()){
+            setTimeout(() => {
+                board.clear()
+                }, 400)
+            };
         checkWin()
         changePlayer();
         interface.signalTurn(currentPlayer)
@@ -373,12 +427,14 @@ const game = (function(){
     const checkWin = () => {
         for (const key of Object.keys(state)){
             if (rowWin(state[key])){
+                AI.freeze(410);
+                board.freeze(1000);
                 currentPlayer.win();
                 board.lightUp(key);
                 clearState();
                 return key;
-            }
-        }
+            };
+        };
     };
 
 return {turn, state, clearState}
