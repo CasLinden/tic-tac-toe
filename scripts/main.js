@@ -47,7 +47,8 @@ const board = (function(){
             field.addEventListener('click', consumeTurn, false);
                 
                 function consumeTurn() {
-                playPlay(this);
+                    let number = +this.getAttribute('data-index');
+                    game.turn(number);
                 };
         };
     };
@@ -58,17 +59,28 @@ const board = (function(){
             field.removeEventListener('click', consumeTurn, false);
                 
                 function consumeTurn() {
-                playPlay(this);
+                    let number = +this.getAttribute('data-index');
+                    game.turn(number);
                 };
         };
+        return
     };
 
+    const testFunc = () => {
 
-    const playPlay = (square) => {
-        let number = +square.getAttribute('data-index');
-        game.turn(number);
-    };
+        let square = field(4)
+        square.addEventListener('click', sayHi);
 
+    }
+
+    const extraTestFunc = () => {
+        let square = field(4)
+        square.removeEventListener('click', sayHi);
+    }
+
+    function sayHi(){
+        console.log('Hi')
+    }
 
 
     const freeze = (time) => {
@@ -98,9 +110,11 @@ const board = (function(){
 
     armFields();
     lightsOff();
+    testFunc();
+    // extraTestFunc(); // works
 
 
-return {state, field, fields, allFields, clear, lightUp, freeze, armFields, disarmFields};
+return {state, field, fields, allFields, clear, freeze, lightUp, armFields, disarmFields};
 })();
 
 
