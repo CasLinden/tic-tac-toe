@@ -41,52 +41,30 @@ const board = (function(){
         game.clearState()
     };
 
-    const armFields = () => {
+    const arm = () => {
         let fields = allFields();
         for(let field of fields){
-            field.addEventListener('click', consumeTurn, false);
-                
-                function consumeTurn() {
-                    let number = +this.getAttribute('data-index');
-                    game.turn(number);
-                };
-        };
-    };
+            field.addEventListener('click', consumeTurn);
+        }
 
-    const disarmFields = () => {
+    }
+
+    const disarm = () => {
         let fields = allFields();
         for(let field of fields){
-            field.removeEventListener('click', consumeTurn, false);
-                
-                function consumeTurn() {
-                    let number = +this.getAttribute('data-index');
-                    game.turn(number);
-                };
-        };
-        return
+            field.removeEventListener('click', consumeTurn);
+        }
+    }
+
+    function consumeTurn(){
+        let num = this.getAttribute('data-index');
+        game.turn(num);
     };
-
-    const testFunc = () => {
-
-        let square = field(4)
-        square.addEventListener('click', sayHi);
-
-    }
-
-    const extraTestFunc = () => {
-        let square = field(4)
-        square.removeEventListener('click', sayHi);
-    }
-
-    function sayHi(){
-        console.log('Hi')
-    }
-
 
     const freeze = (time) => {
-        disarmFields();
+        disarm();
         setTimeout(() => {
-            armFields();
+            arm();
             }, time);
     };
 
@@ -108,13 +86,12 @@ const board = (function(){
         }
     }
 
-    armFields();
+    arm();
     lightsOff();
-    testFunc();
-    // extraTestFunc(); // works
+    
 
 
-return {state, field, fields, allFields, clear, freeze, lightUp, armFields, disarmFields};
+return {state, field, fields, allFields, clear, freeze, lightUp};
 })();
 
 
@@ -126,6 +103,7 @@ const interface = (function(){
         button.addEventListener('click', erase, false); 
                 function erase() {
                 board.clear()
+                turnCount = 0;
                 };
     }
     eraser()
@@ -198,6 +176,7 @@ return {name, symbol, play, win};
 let player1 = Player('player1', 'X');
 let player2 = Player('player2', 'O');
 let currentPlayer = player1
+let turnCount = 0
 
 /* --------------------------------------------------------------------------------*/
 
@@ -277,11 +256,33 @@ const AI = (function(){
         }else return;
     };
 
+    const stopCornerExploit = () => {
+        if(turnCount == 3 && board.state[4] == 'O'){
+                if (currentPlayer.name == 'bot' && countValue(game.state.row2, 'X') === 0 ){
+                    game.turn(3)
+                    console.log('row 2 played')
+                    return
+                } else if (currentPlayer.name == 'bot' && countValue(game.state.column2, 'X') === 0) {
+                    game.turn(1)
+                    console.log('col 2 played')
+                    return
+                } else {
+                    console.log('no exploit')
+                    return
+                }
+    }
+
+}
+
+    
+
     const smartMove = () => {
         if(!AI.frozen){
+        console.log(turnCount)
         makeMove(win);
         makeMove(blockWin);
         secureCenter();
+        stopCornerExploit();
         cornerPrio();
         randomMove();
         };
@@ -337,8 +338,6 @@ const AI = (function(){
 
 const game = (function(){
 
-    let count = 0;
-
     const changePlayer = () => {
         currentPlayer === player1? currentPlayer = player2 : currentPlayer = player1;
     };
@@ -354,6 +353,7 @@ const game = (function(){
             };
         checkWin()
         changePlayer();
+        turnCount++;
         interface.signalTurn(currentPlayer)
     };
 
@@ -434,6 +434,7 @@ const game = (function(){
             results.push(result);
         };
         if(!results.includes(false)){
+            turnCount = 0;
             return true;
         };
     };
@@ -442,10 +443,11 @@ const game = (function(){
         for (const key of Object.keys(state)){
             if (rowWin(state[key])){
                 AI.freeze(410);
-                board.freeze(1000);
+                board.freeze(2100);
                 currentPlayer.win();
                 board.lightUp(key);
                 clearState();
+                turnCount = 0;
                 return key;
             };
         };
