@@ -128,3 +128,36 @@ html {
         stroke-dashoffset: 0;
     }
 }
+
+.stroke1, 
+.stroke2, 
+.stroke3,
+.stroke4{
+    stroke-dasharray: 70;
+    animation: .4s strokeOne, linear;
+}
+
+@keyframes strokeOne{
+    0%{
+        stroke-dashoffset: 70;
+    }
+
+    100%{
+        stroke-dashoffset: 0;
+    }
+}
+
+.stroke5{
+    stroke-dasharray: 172;
+    animation: .4s strokeFive, linear;
+}
+
+@keyframes strokeFive{
+    0%{
+        stroke-dashoffset: 172;
+    }
+
+    100%{
+        stroke-dashoffset: 0;
+    }
+}

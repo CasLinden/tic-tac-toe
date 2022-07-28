@@ -1,10 +1,12 @@
 // Where to go from here:
 // - Satisfying tally win counter
+// - redraw board on reset?
+// - fill board container with random white stripes to mimic wiping?
 // - Better win animation
 // - shake animation for draw
 // - draw 10 times against the AI challenge 
-// - Fixing the AI when player starts with opposite corners
 // - Editable names 
+
 
 
 const board = (function(){
@@ -135,10 +137,56 @@ const interface = (function(){
             };
     }
 
+
+
     AIBtn()
     
 return {signalTurn}
 })();
+
+/* --------------------------------------------------------------------------------*/
+const scoreboard = (function(){
+
+    const addStroke = (strokeClass, d, fill, fillRule, opacity, stroke, strokeLineCap, strokeLineJoin, strokeWidth) => {
+        const scoreboard = document.getElementById('layer-1');
+        let newStroke = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+        newStroke.setAttributeNS(null, 'class', strokeClass);
+        newStroke.setAttributeNS(null, 'd', d);
+        newStroke.setAttributeNS(null, 'fill', fill)
+        newStroke.setAttributeNS(null, 'fill-rule', fillRule)
+        newStroke.setAttributeNS(null, 'opacity', opacity)
+        newStroke.setAttributeNS(null, 'stroke', stroke)
+        newStroke.setAttributeNS(null, 'stroke-linecap', strokeLineCap)
+        newStroke.setAttributeNS(null, 'stroke-linejoin', strokeLineJoin)
+        newStroke.setAttributeNS(null, 'stroke-width', strokeWidth)
+        scoreboard.appendChild(newStroke)
+    }
+
+    const strokeOne = () => {
+        return addStroke('stroke1', 'M52.4341 19.9524C52.4341 43.3592 55.1794 66.7642 55.1794 90.2306', 'none', 'evenodd', '1', '#000000', 'round', 'round', '14.1716')
+    }
+
+    const strokeTwo = () => {
+        return addStroke('stroke2', "M92.0571 20.593C92.0571 23.8332 92.9198 27.1224 92.7892 30.4758C92.2996 43.0419 90.6001 55.7059 90.959 68.2687C91.0946 73.0149 90.8645 77.7115 90.6845 82.4524C90.581 85.1784 90.593 84.7369 90.593 86.6618C90.593 87.2749 90.2276 88.7661 90.776 88.4919", 'none', 'evenodd', '1', '#000000', 'round', 'round', '14.1716')
+    }
+
+    const strokeThree = () => {
+        return addStroke('stroke3', "M124.817 19.9524C124.817 22.9701 125.36 26.1135 125.275 29.1947C125.043 37.5175 124.58 45.8604 124.176 54.1764C123.871 60.4638 123.119 66.7167 123.353 73.0271C123.507 77.1813 123.972 81.3285 124.268 85.4722C124.344 86.5374 124.908 87.3698 124.908 88.4004", 'none', 'evenodd', '1', '#000000', 'round', 'round', '14.1716')
+    }
+
+    const strokeFour = () => {
+        return addStroke('stroke4', "M159.682 18.1223C159.356 17.4715 159.584 20.3321 159.59 20.41C159.708 22.0591 159.729 22.5507 159.682 24.4363C159.545 29.902 159.074 35.3532 158.858 40.8163C158.48 50.3654 157.865 59.9048 157.76 69.4583C157.706 74.3553 156.96 79.815 158.034 84.6486", 'none', 'evenodd', '1', '#000000', 'round', 'round', '14.1716')
+    }
+
+    const strokeFive = () => {
+        return addStroke('stroke5', "M32.5769 81.9949C36.1279 78.4438 42.3448 76.4264 46.7606 74.1252C55.7769 69.4266 65.1478 65.237 74.4876 61.2225C101.852 49.4606 130.362 40.0059 158.858 31.3909C166.629 29.0415 174.433 26.8685 182.284 24.8023C185.934 23.8419 190.176 22.1486 193.997 22.1486", 'none', 'evenodd', '1', '#000000', 'round', 'round', '14.1716')
+    }
+
+    return {strokeOne, strokeTwo, strokeThree, strokeFour, strokeFive}
+
+})();
+
+// vector drawn with brush on 14 and pencil on 56% in Vectornator 
 
 /* --------------------------------------------------------------------------------*/
 
@@ -175,8 +223,8 @@ return {name, symbol, play, win};
 
 let player1 = Player('player1', 'X');
 let player2 = Player('player2', 'O');
-let currentPlayer = player1
-let turnCount = 0
+let currentPlayer = player1;
+let turnCount = 0;
 
 /* --------------------------------------------------------------------------------*/
 
