@@ -2,11 +2,15 @@
 // - make players take equal turns 
 // - use vector creation tool to create O and X at same thickness, with a better X, without altering innerHTML
 
-// - Better win animation, what's cool?
+// - tally for player Two latches onto the Player 1 score container after 5 points
+
+// - Red line through winning row/column/diagonal (add path)
 // - shake animation for draw
 
-// - fill board container with random white stripes to mimic wiping?
+
 // - redraw board on reset?
+// - fill board container with random white stripes to mimic wiping?
+
 
 // - get rid of global player variables
 
@@ -294,7 +298,7 @@ const game = (function(){
         for (const key of Object.keys(state)){
             if (rowWin(state[key])){
                 AI.freeze(410);
-                board.freeze(2100);
+                board.freeze(1000);
                 currentPlayer.score++
                 scoreboard.update(currentPlayer.num)
                 board.lightUp(key);
@@ -391,12 +395,12 @@ const scoreboard = (function(){
         template.setAttribute('id', '');
         newBox.setAttribute('id', `currentBox${playerNr}`)
 
-        let container = document.getElementById('score-container1');
+        let container = document.getElementById(`score-container${playerNr}`);
         container.appendChild(newBox)
         console.log(newBox)
     }
 
-    return {strokeOne, strokeTwo, strokeThree, strokeFour, strokeFive, newBox, update}
+    return {update}
 
 })();
 
