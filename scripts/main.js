@@ -2,7 +2,7 @@
 // - make players take equal turns 
 // - use vector creation tool to create O and X at same thickness, with a better X, without altering innerHTML
 
-// - tally for player Two latches onto the Player 1 score container after 5 points
+// - bug (second container stroke 5 doesn't go off because it's set to 0)
 
 // - Red line through winning row/column/diagonal (add path)
 // - shake animation for draw
@@ -334,7 +334,7 @@ const scoreboard = (function(){
         if (score === 4){
             strokeFour(playerNr);
         };
-        if (score === 5){
+        if (score === 5 || score === 0){
             strokeFive(playerNr);
         };     
         
@@ -353,14 +353,14 @@ const scoreboard = (function(){
         let newStroke = document.createElementNS("http://www.w3.org/2000/svg", 'path');
         newStroke.setAttributeNS(null, 'class', strokeClass);
         newStroke.setAttributeNS(null, 'd', d);
-        newStroke.setAttributeNS(null, 'fill', 'none')
-        newStroke.setAttributeNS(null, 'fill-rule', 'evenodd')
-        newStroke.setAttributeNS(null, 'opacity', '.7')
-        newStroke.setAttributeNS(null, 'stroke', '#000000')
-        newStroke.setAttributeNS(null, 'stroke-linecap', 'round')
-        newStroke.setAttributeNS(null, 'stroke-linejoin', 'round')
-        newStroke.setAttributeNS(null, 'stroke-width', '14.1716')
-        current.appendChild(newStroke)
+        newStroke.setAttributeNS(null, 'fill', 'none');
+        newStroke.setAttributeNS(null, 'fill-rule', 'evenodd');
+        newStroke.setAttributeNS(null, 'opacity', '.7');
+        newStroke.setAttributeNS(null, 'stroke', '#000000');
+        newStroke.setAttributeNS(null, 'stroke-linecap', 'round');
+        newStroke.setAttributeNS(null, 'stroke-linejoin', 'round');
+        newStroke.setAttributeNS(null, 'stroke-width', '14.1716');
+        current.appendChild(newStroke);
     }
 
 
@@ -386,18 +386,17 @@ const scoreboard = (function(){
 
     const newBox = (playerNr) => {
         let template = document.querySelector(`#currentBox${playerNr}`);
-        console.log(template)
         let newBox = template.cloneNode(true);
         let paths = newBox.querySelectorAll('path')
             for(let path of paths){
                 path.remove()
             }
+
         template.setAttribute('id', '');
         newBox.setAttribute('id', `currentBox${playerNr}`)
 
         let container = document.getElementById(`score-container${playerNr}`);
         container.appendChild(newBox)
-        console.log(newBox)
     }
 
     return {update}
