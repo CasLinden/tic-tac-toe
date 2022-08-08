@@ -39,7 +39,7 @@ html {
     /* background-color: rgb(14, 12, 12); */
 }
 
-#board-container > div {
+#board-container > svg {
     display: grid;
     place-content: center;
     transition: all .5s;
@@ -110,10 +110,6 @@ html {
     font-weight: 900;
     border-color: black;
     box-shadow: 0 0 20px black;
-}
-
-.currentplayer{
-    background-color: grey;
 }
 
 .x{

@@ -96,7 +96,7 @@ const board = (function(){
         }
     }
 
-    const shake = () => {
+    const drawAnimation = () => {
         const squares = allFields()
         for (let square of squares){
             square.classList.add('shaking')
@@ -107,7 +107,7 @@ const board = (function(){
     arm();
     lightsOff();
 
-return {state, field, fields, allFields, clear, freeze, lightUp, shake};
+return {state, field, fields, allFields, clear, freeze, lightUp, drawAnimation};
 })();
 
 /* --------------------------------------------------------------------------------*/
@@ -163,17 +163,18 @@ const Player = (name, symbol, num) => {
             const playedField = board.field(number);
             if (symbol === 'X'){
                 playedField.innerHTML = `
-                <svg  class='x' width="120" height="120" viewBox="0 0 222 217"  xmlns="http://www.w3.org/2000/svg">
+                <svg  class='x' width="148" height="148" viewBox="0 0 222 217"  xmlns="http://www.w3.org/2000/svg">
                 <rect width="222" height="217" fill="#F5F5F5"/>
                 <rect width="222" height="217" fill="white"/>
                 <path d="M171.069 28C128.976 81.7712 84.9104 132.532 37.1745 180.049C36.4008 180.819 38.5245 178.227 38.8635 177.134C42.1638 166.486 41.7563 153.547 41.6274 142.608C41.2428 109.964 36.6913 77.7381 31.3396 45.72C30.7156 41.9863 29.4509 37.2545 30.2648 33.316C30.6339 31.5295 30.9155 31.4108 32.7728 32.6872C44.7687 40.9316 56.5666 57.0368 66.1441 67.4412C95.8841 99.749 125.874 131.646 157.25 161.986C173.492 177.691 190.118 191.44 207 206" stroke="black" stroke-width="5" stroke-linecap="round"/>
                 </svg>`
             };
             if (symbol === 'O'){
-                playedField.innerHTML =
-                `<svg class='o'width="100" height="100" viewBox="0 0 144 161"  xmlns="http://www.w3.org/2000/svg">
-                <path d="M72 3C84.342 3 96.5836 7.82356 107 14.2222C114.999 19.136 121.772 24.694 125.778 33.5556C127.955 38.3729 132.024 41.6277 134.556 46.2222C137.454 51.4828 138.868 57.7067 140 63.5556C144.538 87.0028 135.811 110.958 121.333 129.222C108.854 144.965 88.8297 155.25 68.8889 157.778C55.2468 159.507 40.8527 149.932 30.4444 142.222C17.9763 132.987 11.3496 119.483 5.44445 105.444C0.465255 93.6071 2.92072 79.666 7 67.7778C10.8761 56.4817 13.4184 44.7747 19.2222 34.2222C23.5112 26.424 26.5398 21.2621 34.3333 17C40.364 13.702 46.8193 12.617 53.4444 11.2222C59.4155 9.96515 68.0063 10.3292 73 7" stroke="black" stroke-width="5" stroke-linecap="round"/>
-                </svg>`
+                pencil.draw('circle',"M 76.5238 31.1486 C 80.7372 29.0419 88.3325 31.7463 92.1448 33.3802 C 105.285 39.0116 118.644 51.7731 122.717 65.7379 C 124.893 73.1983 125.955 82.4239 123.833 90.062 C 115.51 120.025 78.8439 135.958 50.1913 127.999 C 29.3914 122.221 19.5415 96.6984 23.1894 76.8958 C 27.2161 55.0362 47.4062 33.351 68.4902 26.9086 C 71.8292 25.8884 75.5357 25.9841 78.9786 25.7929", board.field, number)
+                // playedField.innerHTML =
+                // `<svg class='o'width="148" height="148" viewBox="0 0 144 161"  xmlns="http://www.w3.org/2000/svg">
+                // <path d="M72 3C84.342 3 96.5836 7.82356 107 14.2222C114.999 19.136 121.772 24.694 125.778 33.5556C127.955 38.3729 132.024 41.6277 134.556 46.2222C137.454 51.4828 138.868 57.7067 140 63.5556C144.538 87.0028 135.811 110.958 121.333 129.222C108.854 144.965 88.8297 155.25 68.8889 157.778C55.2468 159.507 40.8527 149.932 30.4444 142.222C17.9763 132.987 11.3496 119.483 5.44445 105.444C0.465255 93.6071 2.92072 79.666 7 67.7778C10.8761 56.4817 13.4184 44.7747 19.2222 34.2222C23.5112 26.424 26.5398 21.2621 34.3333 17C40.364 13.702 46.8193 12.617 53.4444 11.2222C59.4155 9.96515 68.0063 10.3292 73 7" stroke="black" stroke-width="5" stroke-linecap="round"/>
+                // </svg>`
             };
             board.state[number] = symbol;
             };
@@ -365,40 +366,24 @@ const scoreboard = (function(){
         return current
     }
 
-    const addStroke = (strokeClass, d, playerNr) => {
-        let current = currentBox(playerNr);
-        let newStroke = document.createElementNS("http://www.w3.org/2000/svg", 'path');
-        newStroke.setAttributeNS(null, 'class', strokeClass);
-        newStroke.setAttributeNS(null, 'd', d);
-        newStroke.setAttributeNS(null, 'fill', 'none');
-        newStroke.setAttributeNS(null, 'fill-rule', 'evenodd');
-        newStroke.setAttributeNS(null, 'opacity', '.7');
-        newStroke.setAttributeNS(null, 'stroke', '#000000');
-        newStroke.setAttributeNS(null, 'stroke-linecap', 'round');
-        newStroke.setAttributeNS(null, 'stroke-linejoin', 'round');
-        newStroke.setAttributeNS(null, 'stroke-width', '14.1716');
-        current.appendChild(newStroke);
-    }
-
-
     const strokeOne = (playerNr) => {
-        return addStroke('stroke1', 'M52.4341 19.9524C52.4341 43.3592 55.1794 66.7642 55.1794 90.2306', playerNr)
+        return pencil.draw('stroke1', 'M52.4341 19.9524C52.4341 43.3592 55.1794 66.7642 55.1794 90.2306', currentBox, playerNr)
     }
 
     const strokeTwo = (playerNr) => {
-        return addStroke('stroke2', "M92.0571 20.593C92.0571 23.8332 92.9198 27.1224 92.7892 30.4758C92.2996 43.0419 90.6001 55.7059 90.959 68.2687C91.0946 73.0149 90.8645 77.7115 90.6845 82.4524C90.581 85.1784 90.593 84.7369 90.593 86.6618C90.593 87.2749 90.2276 88.7661 90.776 88.4919", playerNr)
+        return pencil.draw('stroke2', "M92.0571 20.593C92.0571 23.8332 92.9198 27.1224 92.7892 30.4758C92.2996 43.0419 90.6001 55.7059 90.959 68.2687C91.0946 73.0149 90.8645 77.7115 90.6845 82.4524C90.581 85.1784 90.593 84.7369 90.593 86.6618C90.593 87.2749 90.2276 88.7661 90.776 88.4919", currentBox, playerNr)
     }
 
     const strokeThree = (playerNr) => {
-        return addStroke('stroke3', "M124.817 19.9524C124.817 22.9701 125.36 26.1135 125.275 29.1947C125.043 37.5175 124.58 45.8604 124.176 54.1764C123.871 60.4638 123.119 66.7167 123.353 73.0271C123.507 77.1813 123.972 81.3285 124.268 85.4722C124.344 86.5374 124.908 87.3698 124.908 88.4004", playerNr)
+        return pencil.draw('stroke3', "M124.817 19.9524C124.817 22.9701 125.36 26.1135 125.275 29.1947C125.043 37.5175 124.58 45.8604 124.176 54.1764C123.871 60.4638 123.119 66.7167 123.353 73.0271C123.507 77.1813 123.972 81.3285 124.268 85.4722C124.344 86.5374 124.908 87.3698 124.908 88.4004", currentBox, playerNr)
     }
 
     const strokeFour = (playerNr) => {
-        return addStroke('stroke4', "M159.682 18.1223C159.356 17.4715 159.584 20.3321 159.59 20.41C159.708 22.0591 159.729 22.5507 159.682 24.4363C159.545 29.902 159.074 35.3532 158.858 40.8163C158.48 50.3654 157.865 59.9048 157.76 69.4583C157.706 74.3553 156.96 79.815 158.034 84.6486", playerNr)
+        return pencil.draw('stroke4', "M159.682 18.1223C159.356 17.4715 159.584 20.3321 159.59 20.41C159.708 22.0591 159.729 22.5507 159.682 24.4363C159.545 29.902 159.074 35.3532 158.858 40.8163C158.48 50.3654 157.865 59.9048 157.76 69.4583C157.706 74.3553 156.96 79.815 158.034 84.6486", currentBox, playerNr)
     }
 
     const strokeFive = (playerNr) => {
-        return addStroke('stroke5', "M32.5769 81.9949C36.1279 78.4438 42.3448 76.4264 46.7606 74.1252C55.7769 69.4266 65.1478 65.237 74.4876 61.2225C101.852 49.4606 130.362 40.0059 158.858 31.3909C166.629 29.0415 174.433 26.8685 182.284 24.8023C185.934 23.8419 190.176 22.1486 193.997 22.1486", playerNr)
+        return pencil.draw('stroke5', "M32.5769 81.9949C36.1279 78.4438 42.3448 76.4264 46.7606 74.1252C55.7769 69.4266 65.1478 65.237 74.4876 61.2225C101.852 49.4606 130.362 40.0059 158.858 31.3909C166.629 29.0415 174.433 26.8685 182.284 24.8023C185.934 23.8419 190.176 22.1486 193.997 22.1486", currentBox, playerNr)
     }
 
     const newBox = (playerNr) => {
@@ -416,11 +401,39 @@ const scoreboard = (function(){
         container.appendChild(newBox)
     }
 
-    return {update}
+    return {update, currentBox}
 
 })();
 
-// vector drawn with brush on 14 and pencil on 56% in Vectornator 
+/* --------------------------------------------------------------------------------*/
+
+const pencil = (function(){
+
+    
+    const draw = (strokeClass, path , container, number) => {
+        let location = container(number);
+        console.log(location.firstChild)
+        let newStroke = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+        newStroke.setAttributeNS(null, 'class', strokeClass);
+        newStroke.setAttributeNS(null, 'd', path);
+        newStroke.setAttributeNS(null, 'fill', 'none');
+        newStroke.setAttributeNS(null, 'fill-rule', 'evenodd');
+        newStroke.setAttributeNS(null, 'opacity', '.7');
+        newStroke.setAttributeNS(null, 'stroke', '#000000');
+        newStroke.setAttributeNS(null, 'stroke-linecap', 'round');
+        newStroke.setAttributeNS(null, 'stroke-linejoin', 'round');
+        newStroke.setAttributeNS(null, 'stroke-width', '14.1716');
+        location.appendChild(newStroke);
+    }
+
+    const testDraw = () =>{
+        return pencil.draw('stroke5', "M32.5769 81.9949C36.1279 78.4438 42.3448 76.4264 46.7606 74.1252C55.7769 69.4266 65.1478 65.237 74.4876 61.2225C101.852 49.4606 130.362 40.0059 158.858 31.3909C166.629 29.0415 174.433 26.8685 182.284 24.8023C185.934 23.8419 190.176 22.1486 193.997 22.1486", board.field, 0)
+    }
+
+
+    return {draw, testDraw}
+})();
+
 
 
 /* --------------------------------------------------------------------------------*/
@@ -578,3 +591,4 @@ const AI = (function(){
       
     return {on, off, freeze, unFreeze, AIFirst}
 })();
+ 
