@@ -1,16 +1,13 @@
 // To do: 
-// - make players take equal turns 
+
 // - use vector creation tool to create O and X at same thickness, with a better X, without altering innerHTML
 
-// - bug (second container stroke 5 doesn't go off because it's set to 0)
-
 // - Red line through winning row/column/diagonal (add path)
-// - shake animation for draw
-
-
 // - redraw board on reset?
 // - fill board container with random white stripes to mimic wiping?
 
+
+// - shake animation for draw
 
 // - get rid of global player variables
 
@@ -50,7 +47,9 @@ const board = (function(){
             state[i] = null;
         };
         render();
-        game.clearState()
+        game.clearState();
+        game.startingPlayer();
+        AI.AIFirst();
     };
 
     const arm = () => {
@@ -93,15 +92,22 @@ const board = (function(){
             field.addEventListener('transitionend', removeTransition)
             function removeTransition(){
             field.classList.remove('litup');
-            clear();
-            }
+            };
         }
     }
+
+    const shake = () => {
+        const squares = allFields()
+        for (let square of squares){
+            square.classList.add('shaking')
+        }
+    };
+
 
     arm();
     lightsOff();
 
-return {state, field, fields, allFields, clear, freeze, lightUp};
+return {state, field, fields, allFields, clear, freeze, lightUp, shake};
 })();
 
 /* --------------------------------------------------------------------------------*/
@@ -111,7 +117,7 @@ const interface = (function(){
         const button = document.querySelector('#eraser');
         button.addEventListener('click', erase, false); 
                 function erase() {
-                board.clear()
+                board.clear();
                 turnCount = 0;
                 };
     }
@@ -170,15 +176,12 @@ const Player = (name, symbol, num) => {
                 </svg>`
             };
             board.state[number] = symbol;
-            console.log(board.state)
             };
 
     let score = 0
 
-    const win = () => {
-    }
  
-return {name, symbol, play, win, score, num};
+return {name, symbol, play, score, num};
 };
 
 /* --------------------------------------------------------------------------------*/
@@ -186,8 +189,8 @@ return {name, symbol, play, win, score, num};
 let player1 = Player('player1', 'X', 1);
 let player2 = Player('player2', 'O', 2);
 let currentPlayer = player1;
+let gameCount = 0;
 let turnCount = 0;
-
 
 /* --------------------------------------------------------------------------------*/
 
@@ -196,19 +199,27 @@ const game = (function(){
     const changePlayer = () => {
         currentPlayer === player1? currentPlayer = player2 : currentPlayer = player1;
     };
+
+    const startingPlayer = () => {
+        if (turnCount === 0){
+            gameCount % 2 === 0 || gameCount === 0? currentPlayer = player1 : currentPlayer = player2;
+            return;
+        };
+    };
     
     const turn = (number) => {
         if (board.state[number] !== null) return
         currentPlayer.play(number);
         updateState(number);
+        turnCount++;
         if(checkDraw()){
+            gameCount++;
             setTimeout(() => {
                 board.clear()
                 }, 400)
             };
-        checkWin()
+        checkWin();
         changePlayer();
-        turnCount++;
         interface.signalTurn(currentPlayer)
     };
 
@@ -273,6 +284,7 @@ const game = (function(){
      return result;
     };
 
+
     const rowDraw = (row) => {
         const result = row.every(e => {
             if (row.includes('X') && row.includes('O') ){
@@ -294,11 +306,16 @@ const game = (function(){
         };
     };
 
+
     const checkWin = () => {
         for (const key of Object.keys(state)){
             if (rowWin(state[key])){
+                gameCount++
                 AI.freeze(410);
                 board.freeze(1000);
+                setTimeout(() => {
+                    board.clear();
+                }, 400);
                 currentPlayer.score++
                 scoreboard.update(currentPlayer.num)
                 board.lightUp(key);
@@ -309,7 +326,7 @@ const game = (function(){
         };
     };
 
-return {turn, state, clearState}
+return {turn, state, clearState, changePlayer, startingPlayer}
 })();
 
 /* --------------------------------------------------------------------------------*/
@@ -419,6 +436,12 @@ const AI = (function(){
             };
         return moves;
     };
+
+    const AIFirst = () =>{
+        if (turnCount === 0 && currentPlayer.name == 'bot'){
+            slowMove();
+        }
+    }
     
     const randomMove = () => {
         if(currentPlayer.name == 'bot'){
@@ -466,7 +489,7 @@ const AI = (function(){
             game.turn(square.getAttribute('data-index'));
             };
         };
-    };
+        };
 };
 
     const cornerPrio = () => {
@@ -501,7 +524,6 @@ const AI = (function(){
 
     const smartMove = () => {
         if(!AI.frozen){
-        console.log(turnCount)
         makeMove(win);
         makeMove(blockWin);
         secureCenter();
@@ -554,5 +576,5 @@ const AI = (function(){
         AI.frozen = false;
     };
       
-    return {on, off, freeze, unFreeze}
+    return {on, off, freeze, unFreeze, AIFirst}
 })();
