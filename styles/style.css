@@ -5,7 +5,6 @@
 html {
     box-sizing: border-box;
     font-family: 'Gochi Hand';
-    color: #000000;
     font-size: 14px;
     
 }
@@ -35,15 +34,13 @@ html {
     height: 450px;
     font-size: 120px;
     background-image: url("../board.jpg");
-    opacity: .7;
-    /* background-color: rgb(14, 12, 12); */
 }
 
 #board-container > svg {
-    display: grid;
-    place-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all .5s;
-    /* background-color: white; */
     margin: 0;
     padding: 0;
 }
@@ -113,14 +110,13 @@ html {
 }
 
 .x{
-    stroke-dasharray: 601;
-    fill: white;
-    animation: .4s fillSvgX, linear;
+    stroke-dasharray: 138;
+    animation: .2s fillSvgX, linear;
 }
 
 @keyframes fillSvgX{
     0%{
-        stroke-dashoffset: 601;
+        stroke-dashoffset: 138;
     }
 
     100%{
@@ -129,14 +125,13 @@ html {
 }
 
 .o{
-    stroke-dasharray: 455;
-    fill: white;
+    stroke-dasharray: 318;
     animation: .4s fillSvgO, linear;
 }
 
 @keyframes fillSvgO{
     0%{
-        stroke-dashoffset: 455;
+        stroke-dashoffset: 318;
     }
 
     100%{
