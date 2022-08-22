@@ -33,7 +33,7 @@ html {
     width: 450px;
     height: 450px;
     font-size: 120px;
-    background-image: url("../board.jpg");
+    background-image: url("../board-grid.svg");
 }
 
 #board-container > svg {
@@ -43,6 +43,15 @@ html {
     transition: all .5s;
     margin: 0;
     padding: 0;
+}
+
+#board-underlay{
+    position: absolute;
+    background-color: white;
+    height: 450px;
+    width: 450px;
+    opacity: 0;
+    z-index: -1;
 }
 
 #interface{
