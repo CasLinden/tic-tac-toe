@@ -3,17 +3,15 @@
 // - Red line through winning row/column/diagonal as new win animation
 
 // - redraw board on reset?
-// - fill board container with random white stripes to mimic wiping clean?
+// - fill board container with animated white strokes to mimic wiping board?
 
-// - shake animation for draw
-
-// - get rid of global player variables
-
-// - draw 10 times against the AI challenge 
-
-// - Editable names 
+// - animation for draw
 
 // - different indicator for current player?
+
+// - reset score button
+
+// - make bot play immediately if clicked when it's its turn
 
 
 const board = (function(){
@@ -146,6 +144,31 @@ const interface = (function(){
         }
     }
 
+    const changeName = () => {
+        const names = document.getElementsByClassName('name');
+        for(let name of names){
+            name.addEventListener('click', addInput, false);
+            function addInput() {
+                if(name.childElementCount < 1){
+                name.textContent = '';
+                const input = document.createElement('input');
+                input.setAttribute('type', 'text');
+                input.setAttribute('maxlength', '14')
+                input.style.width ='100px';
+                input.style.height = '30px'
+                input.addEventListener('change', ownName, false);
+                function ownName (){
+                    name.textContent = input.value;
+                }
+                name.appendChild(input);
+                }
+            }
+        }
+    }
+
+    changeName()
+
+
     const AIBtn = () => {
         const btn = document.getElementById('AI-btn');
         btn.addEventListener('click', toggleAI, false);
@@ -174,12 +197,12 @@ const Player = (name, symbol, num) => {
             const playedField = board.field(number);
             if (symbol === 'X'){
                 setTimeout(() => {
-                    pencil.draw('x',"M 30.6885 121.802 C 32.0467 118.406 34.9066 115.18 37.0605 112.28 C 42.2137 105.343 47.903 98.7013 53.6865 92.2852 C 68.5368 75.8106 83.3557 59.1383 99.1699 43.5791 C 105.416 37.434 111.844 31.4059 118.799 26.0742 C 119.573 25.4807 123.567 21.7934 124.512 22.2656", board.field, number, 5)
+                    pencil.draw('x',"M 30.6885 121.802 C 32.0467 118.406 34.9066 115.18 37.0605 112.28 C 42.2137 105.343 47.903 98.7013 53.6865 92.2852 C 68.5368 75.8106 83.3557 59.1383 99.1699 43.5791 C 105.416 37.434 111.844 31.4059 118.799 26.0742 C 119.573 25.4807 123.567 21.7934 124.512 22.2656", board.field, number, 4)
                     }, 200);
-                pencil.draw('x',"M 26.7334 21.3135 C 29.7679 22.8307 32.1576 25.7855 34.4971 28.125 C 38.8061 32.434 43.1812 36.6701 47.4609 41.0156 C 59.6383 53.3803 71.6732 65.6323 82.9102 78.8818 C 86.1626 82.7168 89.7527 86.2074 92.8711 90.1611 C 99.4003 98.4392 106.17 106.667 114.185 113.599 C 116.456 115.563 119.828 119.238 123.047 119.238", board.field, number, 5);
+                pencil.draw('x',"M 26.7334 21.3135 C 29.7679 22.8307 32.1576 25.7855 34.4971 28.125 C 38.8061 32.434 43.1812 36.6701 47.4609 41.0156 C 59.6383 53.3803 71.6732 65.6323 82.9102 78.8818 C 86.1626 82.7168 89.7527 86.2074 92.8711 90.1611 C 99.4003 98.4392 106.17 106.667 114.185 113.599 C 116.456 115.563 119.828 119.238 123.047 119.238", board.field, number, 4);
             };
             if (symbol === 'O'){
-                pencil.draw('o',"M 71.0083 21.46 C 70.2908 21.1339 75.1739 21.2117 76.9043 21.3135 C 83.2241 21.6852 89.3819 23.3573 94.8486 26.6602 C 109.735 35.654 120.368 51.5686 121.362 69.0674 C 122.347 86.4002 115.681 105.521 100.708 115.503 C 92.8552 120.738 84.6574 123.276 75.4395 125.171 C 68.8633 126.523 61.9876 127.413 55.2979 126.343 C 27.678 121.924 23.5079 86.6041 28.8574 64.2334 C 30.1065 59.0101 32.3037 53.917 34.7168 49.1455 C 39.2893 40.1045 46.7035 30.5342 56.1035 26.1475 C 59.5711 24.5292 63.1907 23.1141 66.8701 22.0459 C 67.607 21.832 72.1311 21.9702 71.0083 21.46 Z", board.field, number, 5);
+                pencil.draw('o',"M 71.0083 21.46 C 70.2908 21.1339 75.1739 21.2117 76.9043 21.3135 C 83.2241 21.6852 89.3819 23.3573 94.8486 26.6602 C 109.735 35.654 120.368 51.5686 121.362 69.0674 C 122.347 86.4002 115.681 105.521 100.708 115.503 C 92.8552 120.738 84.6574 123.276 75.4395 125.171 C 68.8633 126.523 61.9876 127.413 55.2979 126.343 C 27.678 121.924 23.5079 86.6041 28.8574 64.2334 C 30.1065 59.0101 32.3037 53.917 34.7168 49.1455 C 39.2893 40.1045 46.7035 30.5342 56.1035 26.1475 C 59.5711 24.5292 63.1907 23.1141 66.8701 22.0459 C 67.607 21.832 72.1311 21.9702 71.0083 21.46 Z", board.field, number, 4);
             };
             board.state[number] = symbol;
             };
@@ -565,8 +588,15 @@ const AI = (function(){
         }, 400);
     }
 
+    const displayBotName = (input) => {
+        const name = document.querySelector('.p2name')
+        name.textContent = input
+    }
+
     const on = () => {
         player2.name = 'bot'
+        displayBotName('RoboRob')
+        
 
             let fields = board.allFields();
             for(let field of fields){
@@ -580,6 +610,7 @@ const AI = (function(){
 
     const off = () => {
         player2.name = 'player2'
+        displayBotName('Player2')
 
             let fields = board.allFields();
             for(let field of fields){
