@@ -106,10 +106,6 @@ const board = (function(){
     };
 
     const drawBoard = () => {
-        return pencil.draw('boardstroke', 'M52.4341 19.9524C52.4341 43.3592 55.1794 66.7642 55.1794 90.2306', currentBox, playerNr, 14.1716)
-     
-
-
     };
 
 
@@ -132,17 +128,29 @@ const interface = (function(){
     }
     eraser()
 
-    const signalTurn = (player) => {
-        const one = document.getElementById('player1');
-        const two = document.getElementById('player2');
-        if (player == player1){
-            one.style.color = 'green';
-            two.style.color = '#000000'
-        } if (player == player2){
-            two.style.color = 'green';
-            one.style.color = '#000000'
+    const signalTurn = (playerNr) => {
+
+        const arrowBox = (playerNr) => {
+            return document.getElementById(`arrowBox${playerNr}`)
         }
-    }
+
+        let other
+        playerNr === 1? other = 2 : other = 1;
+
+        let paths = arrowBox(other).querySelectorAll('path')
+        for(let path of paths){
+            path.remove()
+        }
+
+        setTimeout(() => {
+            pencil.draw('largerThan',"M 18.6197 9.12406 C 18.6193 9.1235 18.3774 8.76931 18.4026 8.74413 C 18.5386 8.60814 18.6348 9.05521 18.7825 9.17833 C 19.1034 9.44572 19.6391 9.74536 19.9766 9.93818 C 20.6956 10.3491 21.338 10.8026 22.039 11.2408 C 23.8426 12.368 25.329 14.0105 27.0323 15.2028 C 27.2571 15.3602 28.4434 16.1158 28.4434 16.3969 C 28.4434 17.0936 27.3032 18.3876 26.9237 18.8935 C 25.68 20.5518 24.3811 22.3276 23.2331 24.0496 C 22.6524 24.9206 22.001 25.6589 21.3334 26.4377 C 21.1231 26.6831 20.9441 26.8876 20.7907 27.1433 C 20.718 27.2644 20.5193 27.6102 20.5193 27.4689 C 20.5193 27.3308 20.6703 27.1771 20.7364 27.089", arrowBox, playerNr, 4);
+            }, 800);
+            
+            setTimeout(() => {
+                pencil.draw('dash',"M 5.61527 17.7197 C 7.28996 17.301 9.56653 17.6105 11.2937 17.6105 C 13.8215 17.6105 16.4103 17.9687 18.9377 17.7743 C 21.3587 17.5881 24.1487 17.0159 26.5272 17.6105", arrowBox, playerNr, 4);
+                }, 600);
+        
+        }
 
     const changeName = () => {
         const names = document.getElementsByClassName('name');
@@ -194,7 +202,6 @@ return {signalTurn}
 const Player = (name, symbol, num) => {
     
     const play = (number) => {
-            const playedField = board.field(number);
             if (symbol === 'X'){
                 setTimeout(() => {
                     pencil.draw('x',"M 30.6885 121.802 C 32.0467 118.406 34.9066 115.18 37.0605 112.28 C 42.2137 105.343 47.903 98.7013 53.6865 92.2852 C 68.5368 75.8106 83.3557 59.1383 99.1699 43.5791 C 105.416 37.434 111.844 31.4059 118.799 26.0742 C 119.573 25.4807 123.567 21.7934 124.512 22.2656", board.field, number, 4)
@@ -249,7 +256,9 @@ const game = (function(){
             };
         checkWin();
         changePlayer();
-        interface.signalTurn(currentPlayer)
+        if(player2.name !== 'bot'){
+            interface.signalTurn(currentPlayer.num)
+        }
     };
 
     let state = {};

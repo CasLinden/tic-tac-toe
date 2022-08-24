@@ -13,7 +13,6 @@ html {
     width: 1200px;
     height: 800px;
     padding: 7rem;
-    padding-bottom: 9rem;
     display: grid;
     grid-template-columns: 450px 1fr;
     grid-template-rows: 450px 1fr;
@@ -66,26 +65,27 @@ html {
 .player{
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    align-items: center;
 }
 
 .arrow-box{
-    /* width: 35px;
-    background-color: red; */
+    width: 35px;
+    height: 35px;
 }
 
 .name{
     opacity: .7;
+    margin-right: 1rem;
 }
 
 .score-container{
     display: flex;
+    margin-top: 8px;
 }
 
 #player2{
-    margin-bottom: -3.2rem;
-    display: flex;
     flex-direction: column;
+    margin-bottom: 12px;
 }
 
 
@@ -151,6 +151,36 @@ html {
 @keyframes fillSvgO{
     0%{
         stroke-dashoffset: 318;
+    }
+
+    100%{
+        stroke-dashoffset: 0;
+    }
+}
+
+.dash{
+    stroke-dasharray: 21;
+    animation: .2s fillSvgDash, linear;
+}
+
+@keyframes fillSvgDash{
+    0%{
+        stroke-dashoffset: 21;
+    }
+
+    100%{
+        stroke-dashoffset: 0;
+    }
+}
+
+.largerThan{
+    stroke-dasharray: 27;
+    animation: .2s fillSvgLT, linear;
+}
+
+@keyframes fillSvgLT{
+    0%{
+        stroke-dashoffset: 27;
     }
 
     100%{
