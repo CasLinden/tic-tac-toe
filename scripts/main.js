@@ -469,8 +469,6 @@ const pencil = (function(){
     return {draw, testDraw}
 })();
 
-
-
 /* --------------------------------------------------------------------------------*/
 
 const AI = (function(){

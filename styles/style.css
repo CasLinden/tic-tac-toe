@@ -12,7 +12,7 @@ html {
 #wrapper{
     width: 1200px;
     height: 800px;
-    padding: 7rem;
+    padding: 8.5rem 7rem 7rem 7rem;
     display: grid;
     grid-template-columns: 450px 1fr;
     grid-template-rows: 450px 1fr;
