@@ -7,11 +7,8 @@
 
 // - animation for draw
 
-// - different indicator for current player?
-
 // - reset score button
 
-// - make bot play immediately if clicked when it's its turn
 
 
 const board = (function(){
@@ -605,6 +602,11 @@ const AI = (function(){
     const on = () => {
         player2.name = 'bot'
         displayBotName('RoboRob')
+
+        if(currentPlayer == player2){
+            slowMove()
+            interface.signalTurn(1)
+        }
         
 
             let fields = board.allFields();
