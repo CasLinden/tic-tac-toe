@@ -47,6 +47,7 @@ const board = (function(){
         };
         render();
         game.clearState();
+        gameCount++
         game.startingPlayer();
         AI.AIFirst();
     };
@@ -113,7 +114,7 @@ return {state, field, fields, allFields, clear, freeze, lightUp, drawAnimation, 
 })();
 
 /* --------------------------------------------------------------------------------*/
-const interface = (function(){
+const iFace = (function(){
 
     const eraser = () => {
         const button = document.querySelector('#eraser');
@@ -141,11 +142,11 @@ const interface = (function(){
 
         setTimeout(() => {
             pencil.draw('largerThan',"M 18.6197 9.12406 C 18.6193 9.1235 18.3774 8.76931 18.4026 8.74413 C 18.5386 8.60814 18.6348 9.05521 18.7825 9.17833 C 19.1034 9.44572 19.6391 9.74536 19.9766 9.93818 C 20.6956 10.3491 21.338 10.8026 22.039 11.2408 C 23.8426 12.368 25.329 14.0105 27.0323 15.2028 C 27.2571 15.3602 28.4434 16.1158 28.4434 16.3969 C 28.4434 17.0936 27.3032 18.3876 26.9237 18.8935 C 25.68 20.5518 24.3811 22.3276 23.2331 24.0496 C 22.6524 24.9206 22.001 25.6589 21.3334 26.4377 C 21.1231 26.6831 20.9441 26.8876 20.7907 27.1433 C 20.718 27.2644 20.5193 27.6102 20.5193 27.4689 C 20.5193 27.3308 20.6703 27.1771 20.7364 27.089", arrowBox, playerNr, 4);
-            }, 800);
+            }, 200);
             
             setTimeout(() => {
                 pencil.draw('dash',"M 5.61527 17.7197 C 7.28996 17.301 9.56653 17.6105 11.2937 17.6105 C 13.8215 17.6105 16.4103 17.9687 18.9377 17.7743 C 21.3587 17.5881 24.1487 17.0159 26.5272 17.6105", arrowBox, playerNr, 4);
-                }, 600);
+                }, 100);
         
         }
 
@@ -246,15 +247,17 @@ const game = (function(){
         updateState(number);
         turnCount++;
         if(checkDraw()){
-            gameCount++;
             setTimeout(() => {
                 board.clear()
                 }, 400)
+                AI.freeze(410);
+                board.freeze(1000);
+                return
             };
         checkWin();
         changePlayer();
         if(player2.name !== 'bot'){
-            interface.signalTurn(currentPlayer.num)
+            iFace.signalTurn(currentPlayer.num)
         }
     };
 
@@ -345,7 +348,6 @@ const game = (function(){
     const checkWin = () => {
         for (const key of Object.keys(state)){
             if (rowWin(state[key])){
-                gameCount++
                 AI.freeze(410);
                 board.freeze(1000);
                 setTimeout(() => {
@@ -484,7 +486,7 @@ const AI = (function(){
     };
 
     const AIFirst = () =>{
-        if (turnCount === 0 && currentPlayer.name == 'bot'){
+        if (turnCount === 0 && gameCount % 2 !== 0  && currentPlayer.name == 'bot'){
             slowMove();
         }
     }
@@ -603,7 +605,7 @@ const AI = (function(){
 
         if(currentPlayer == player2){
             slowMove()
-            interface.signalTurn(1)
+            iFace.signalTurn(1)
         }
         
 
