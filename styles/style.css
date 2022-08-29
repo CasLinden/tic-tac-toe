@@ -44,14 +44,6 @@ html {
     padding: 0;
 }
 
-#board-underlay{
-    position: absolute;
-    background-color: white;
-    height: 450px;
-    width: 450px;
-    opacity: 0;
-    z-index: -1;
-}
 
 #interface{
     display: flex;
@@ -221,13 +213,4 @@ html {
     }
 }
 
-/* .shaking{
-    animation: .001s drawAni infinite;
-}
-@keyframes drawAni {
-    0% { transform: translate(0, 0) rotate(0deg); }
-    25% { transform: translate(5px, 5px) rotate(5deg); }
-    50% { transform: translate(0, 0) rotate(0eg); }
-    75% { transform: translate(-5px, 5px) rotate(-5deg); }
-    100% { transform: translate(0, 0) rotate(0deg); }
-  } */
+

@@ -1,4 +1,4 @@
-// To do: 
+// Ideas: 
 
 // - Red line through winning row/column/diagonal as new win animation
 
@@ -29,10 +29,6 @@ const board = (function(){
     const field = (number) => {
         return document.querySelector(`[data-index='${number}']`);
     };
-
-    const testDiv = (number) => {
-        return document.getElementById('test');
-    }
 
     const render = () => {
         for(let i = 0; i <= 8; i++){
@@ -96,21 +92,11 @@ const board = (function(){
         }
     }
 
-    const drawAnimation = () => {
-        const squares = allFields()
-        for (let square of squares){
-            square.classList.add('shaking')
-        }
-    };
-
-    const drawBoard = () => {
-    };
-
 
     arm();
     lightsOff();
 
-return {state, field, fields, allFields, clear, freeze, lightUp, drawAnimation, testDiv, drawBoard};
+return {state, field, fields, allFields, clear, freeze, lightUp};
 })();
 
 /* --------------------------------------------------------------------------------*/
@@ -146,7 +132,7 @@ const iFace = (function(){
             
             setTimeout(() => {
                 pencil.draw('dash',"M 5.61527 17.7197 C 7.28996 17.301 9.56653 17.6105 11.2937 17.6105 C 13.8215 17.6105 16.4103 17.9687 18.9377 17.7743 C 21.3587 17.5881 24.1487 17.0159 26.5272 17.6105", arrowBox, playerNr, 4);
-                }, 100);
+                }, 100 );
         
         }
 
@@ -443,6 +429,8 @@ const scoreboard = (function(){
 
 /* --------------------------------------------------------------------------------*/
 
+
+
 const pencil = (function(){
 
     
@@ -470,6 +458,8 @@ const pencil = (function(){
 
     return {draw, testDraw}
 })();
+
+
 
 /* --------------------------------------------------------------------------------*/
 
