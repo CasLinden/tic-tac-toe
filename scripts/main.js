@@ -547,11 +547,13 @@ const AI = (function(){
 
     const stopCornerExploit = () => {
         if(turnCount == 3 && board.state[4] == 'O'){
+                
                 if (currentPlayer.name == 'bot' && countValue(game.state.row2, 'X') === 0 ){
                     game.turn(3);
+                    console.log('cornerexploit stopped')
                     return;
                 } else if (currentPlayer.name == 'bot' && countValue(game.state.column2, 'X') === 0) {
-                    game.turn(1);
+                    console.log('cornerexploit stopped')
                     return;
                 } else {
                     return;
@@ -561,6 +563,7 @@ const AI = (function(){
 
     const stopCornerExploit2 = () => {
         if(turnCount == 3 && board.state[5] == 'X' && board.state[7] == 'X'){
+            console.log('cornerexploit2 stopped')
             game.turn(8);
         }
     }
