@@ -561,7 +561,14 @@ const AI = (function(){
 
     const stopCornerExploit2 = () => {
         if(turnCount == 3 && board.state[5] == 'X' && board.state[7] == 'X'){
-            game.turn(8)
+            game.turn(8);
+        }
+    }
+
+    const vincentPattern = () => {
+        if(turnCount == 4 && board.state[0] == 'O' && board.state[4] == 'O' && board.state[1] == 'X' && board.state[8] == 'X'){
+            console.log('Roborob thanks Vincent his diligent testing')
+            game.turn(6);
         }
     }
    
@@ -571,6 +578,7 @@ const AI = (function(){
         makeMove(win);
         makeMove(blockWin);
         secureCenter();
+        vincentPattern();
         stopCornerExploit();
         stopCornerExploit2();
         cornerPrio();
